@@ -1,3 +1,22 @@
+"""
+Explore US Bikeshare Data
+
+A command-line interactive tool for exploring bikeshare system usage patterns.
+Analyzes travel times, popular stations, user demographics, and provides raw data exploration.
+
+Features:
+- Filter data by city, month and day
+- Display time/station/trip duration statistics
+- Show user demographics
+- Interactive raw data exploration
+
+Example:
+    $ python bikeshare.py
+    > Enter city (chicago, new york city, washington): chicago
+    > Enter month (all, january-june): all
+    > Enter day (all, monday-sunday): all
+"""
+
 import time
 import pandas as pd
 import numpy as np
@@ -8,12 +27,22 @@ CITY_DATA = { 'chicago': 'chicago.csv',
 
 def get_filters():
     """
-    Asks user to specify a city, month, and day to analyze.
+    Explore US Bikeshare Data
 
-    Returns:
-        (str) city - name of the city to analyze
-        (str) month - name of the month to filter by, or "all" to apply no month filter
-        (str) day - name of the day of week to filter by, or "all" to apply no day filter
+    A command-line interactive tool for exploring bikeshare system usage patterns.
+    Analyzes travel times, popular stations, user demographics, and provides raw data exploration.
+
+    Features:
+    - Filter data by city, month and day
+    - Display time/station/trip duration statistics
+    - Show user demographics
+    - Interactive raw data exploration
+
+    Example:
+        $ python bikeshare.py
+        > Enter city (chicago, new york city, washington): chicago
+        > Enter month (all, january-june): all
+        > Enter day (all, monday-sunday): all
     """
     print('Hello! Let\'s explore some US bikeshare data!')
     # TO DO: get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
@@ -47,14 +76,24 @@ def get_filters():
 
 def load_data(city, month, day):
     """
-    Loads data for the specified city and filters by month and day if applicable.
-
+    Loads and filters bikeshare data based on user inputs.
+    
     Args:
-        (str) city - name of the city to analyze
-        (str) month - name of the month to filter by, or "all" to apply no month filter
-        (str) day - name of the day of week to filter by, or "all" to apply no day filter
+        city (str): Validated city name from get_filters()
+        month (str): Validated month filter from get_filters()
+        day (str): Validated day filter from get_filters()
+    
     Returns:
-        df - Pandas DataFrame containing city data filtered by month and day
+        pd.DataFrame: Filtered dataframe with additional temporal columns:
+            - month (int): 1-6 representing January-June
+            - day_of_week (str): Monday-Sunday
+            - hour (int): 0-23 (created in time_stats())
+    
+    Notes:
+        - Original CSV columns expected: 
+          ['Start Time', 'End Time', 'Trip Duration', 'Start Station', 
+           'End Station', 'User Type', 'Gender', 'Birth Year']
+        - Washington dataset lacks Gender/Birth Year columns
     """
     # load data file into a dataframe
     df = pd.read_csv(CITY_DATA[city])
@@ -84,7 +123,21 @@ def load_data(city, month, day):
 
 
 def time_stats(df):
-    """Displays statistics on the most frequent times of travel."""
+    """
+    Calculates and displays temporal usage patterns.
+    
+    Computes and prints:
+    - Most common travel month (Jan-Jun)
+    - Most common travel day of week
+    - Most common start hour (0-23)
+    
+    Args:
+        df (pd.DataFrame): Filtered dataframe from load_data()
+    
+    Side Effects:
+        Adds 'hour' column to dataframe
+        Prints formatted results to console
+    """
 
     print('\nCalculating The Most Frequent Times of Travel...\n')
     start_time = time.time()
