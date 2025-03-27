@@ -31,3 +31,22 @@ In this project, you will make use of Python to explore data related to bike sha
 - [www.stackoverflow.com](www.stackoverflow.com)
 - [Pandas documentation is very usefull](https://pandas.pydata.org/docs/)
 - [Python documentation for controlflow](https://docs.python.org/3/tutorial/controlflow.html)
+
+## 🔍 Data Validation
+
+### Input Constraints
+
+| Parameter | Valid Values                       | Case Handling    |
+| --------- | ---------------------------------- | ---------------- |
+| City      | Chicago, New York City, Washington | Case-insensitive |
+| Month     | January-June or 'all'              | Case-insensitive |
+| Day       | Monday-Sunday or 'all'             | Case-insensitive |
+
+### Data Quality Checks
+
+- Automatic type conversion for datetime columns
+- Missing values handled by Pandas automatically
+- Washington dataset warnings for missing gender/birth year:
+  ```bash
+  [INFO] Washington data: Gender/Birth Year columns not available
+  ```
