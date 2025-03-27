@@ -44,34 +44,26 @@ def get_filters():
         > Enter month (all, january-june): all
         > Enter day (all, monday-sunday): all
     """
-    print('Hello! Let\'s explore some US bikeshare data!')
-    # TO DO: get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
-    city = input('Enter the city you want see data for Chicago , New York City or Washington : ')
-    city = city.casefold()
-    while city not in CITY_DATA:
-      city = input('Invalid city name.Please Try Again!')
-      city = city.casefold()
+    def validate_input(prompt, options):
+        while True:
+            user_input = input(prompt).casefold()
+            if user_input in options:
+                return user_input
+            print(f"Invalid input. Please choose from: {', '.join(options)}")
 
-    # TO DO: get user input for month (all, january, february, ... , june)
-    months = ['all', 'january', 'february', 'march', 'april', 'may', 'june']
-    month = input('Enter the month from January to June OR Enter "all" for no month filter : ')
-    month = month.casefold()
-    while month not in months:
-        month = input('Invalid month name.Please Try Again!')
-        month = month.casefold()
-        
+    city_prompt = '''\nChoose a city:
+    - Chicago
+    - New York City
+    - Washington\n>>> '''
+    month_prompt = '''\nFilter by month (all, january-june):\n>>> '''
+    day_prompt = '''\nFilter by day (all, monday-sunday):\n>>> '''
 
-    # TO DO: get user input for day of week (all, monday, tuesday, ... sunday)
-    days = ['all', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
-    day = input('Enter the day from Monday to Sunday OR Enter "all" for no day filter : ')
-    day = day.casefold()
-    while day not in days:
-        day = input('Invalid day name.Please Try Again!')
-        day = day.casefold()
-
-
-    print('-'*40)
+    city = validate_input(city_prompt, CITY_DATA.keys())
+    month = validate_input(month_prompt, ['all', 'january', 'february', 'march', 'april', 'may', 'june'])
+    day = validate_input(day_prompt, ['all', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'])
+    
     return city, month, day
+    
 
 
 def load_data(city, month, day):
@@ -118,7 +110,24 @@ def load_data(city, month, day):
     if day != 'all':
         # filter by day of week to create the new dataframe
         df = df[df['day_of_week'] == day.title()]
+    
+    def filter_by_month(df, month):
+    
+        if month != 'all':
+            months = ['january', 'february', 'march', 'april', 'may', 'june']
+            month_idx = months.index(month) + 1
+            return df[df['month'] == month_idx]
+        return df
+
+    def filter_by_day(df, day):
         
+        if day != 'all':
+            return df[df['day_of_week'] == day.title()]
+        
+    df = filter_by_month(df, month)
+    
+    df = filter_by_day(df, day)    
+    
     return df
 
 
@@ -139,29 +148,14 @@ def time_stats(df):
         Prints formatted results to console
     """
 
-    print('\nCalculating The Most Frequent Times of Travel...\n')
-    start_time = time.time()
+    time_features = df['Start Time'].dt
+    df['month'] = time_features.month
+    df['day_of_week'] = time_features.day_name()  
+    df['hour'] = time_features.hour
 
-    # TO DO: display the most common month
-    df['month'] = df['Start Time'].dt.month
-    common_month = df['month'].mode()[0]
-    months = ['January', 'February', 'March', 'April', 'May', 'June']
-    print('Most Popular Month:', months[common_month-1])
-
-    # TO DO: display the most common day of week
-    df['day_of_week'] = df['Start Time'].dt.dayofweek
-    common_day = df['day_of_week'].mode()[0]
-    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-    print('Most Popular Day:', days[common_day])
-
-
-    # TO DO: display the most common start hour
-    df['hour'] = df['Start Time'].dt.hour
-    common_hour = df['hour'].mode()[0]
-    print('Most Popular Start Hour:', common_hour)
-
-    print("\nThis took %s seconds." % (time.time() - start_time))
-    print('-'*40)
+    print(f"Most Popular Month: {df['month'].mode().iloc[0]}")
+    print(f"Most Popular Day: {df['day_of_week'].mode().iloc[0]}")
+    print(f"Most Popular Hour: {df['hour'].mode().iloc[0]}")
 
 
     
