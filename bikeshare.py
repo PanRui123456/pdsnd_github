@@ -124,19 +124,17 @@ def load_data(city, month, day):
 
 def time_stats(df):
     """
-    Calculates and displays temporal usage patterns.
-    
-    Computes and prints:
-    - Most common travel month (Jan-Jun)
-    - Most common travel day of week
-    - Most common start hour (0-23)
+    Analyzes temporal patterns in bike usage with statistical mode.
     
     Args:
         df (pd.DataFrame): Filtered dataframe from load_data()
     
-    Side Effects:
-        Adds 'hour' column to dataframe
-        Prints formatted results to console
+    Statistics Calculated:
+        1. Most common travel month (1-6 mapped to January-June)
+        2. Most frequent weekday (0-6 mapped to Monday-Sunday)
+        3. Peak start hour (0-23 in 24h format)
+    
+    Time Complexity: O(n) for mode calculations
     """
 
     print('\nCalculating The Most Frequent Times of Travel...\n')
@@ -229,6 +227,23 @@ def user_stats(df):
     
 def display_data(df):
     """Displays raw data in chunks of 5 rows upon user request."""
+    """
+    Paginates raw data display in 5-row increments.
+    
+    Args:
+        df (pd.DataFrame): Dataframe to display
+        
+    Flow Control:
+        - Starts from index 0
+        - Continues until user declines or EOF
+        - Maintains position between requests
+        
+    Example:
+        >>> display_data(df)
+        Do you want to see the first 5 rows? [yes/no]: yes
+        [Displays rows 0-4]
+        Do you want to see the next 5 rows? [yes/no]: no
+    """
     start_loc = 0
     while True:
         if start_loc == 0:
