@@ -79,7 +79,24 @@ def load_data(city, month, day):
     if day != 'all':
         # filter by day of week to create the new dataframe
         df = df[df['day_of_week'] == day.title()]
+    
+    def filter_by_month(df, month):
+    
+        if month != 'all':
+            months = ['january', 'february', 'march', 'april', 'may', 'june']
+            month_idx = months.index(month) + 1
+            return df[df['month'] == month_idx]
+        return df
+
+    def filter_by_day(df, day):
         
+        if day != 'all':
+            return df[df['day_of_week'] == day.title()]
+        
+    df = filter_by_month(df, month)
+    
+    df = filter_by_day(df, day)    
+    
     return df
 
 
