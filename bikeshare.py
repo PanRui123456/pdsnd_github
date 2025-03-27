@@ -103,29 +103,14 @@ def load_data(city, month, day):
 def time_stats(df):
     """Displays statistics on the most frequent times of travel."""
 
-    print('\nCalculating The Most Frequent Times of Travel...\n')
-    start_time = time.time()
+    time_features = df['Start Time'].dt
+    df['month'] = time_features.month
+    df['day_of_week'] = time_features.day_name()  
+    df['hour'] = time_features.hour
 
-    # TO DO: display the most common month
-    df['month'] = df['Start Time'].dt.month
-    common_month = df['month'].mode()[0]
-    months = ['January', 'February', 'March', 'April', 'May', 'June']
-    print('Most Popular Month:', months[common_month-1])
-
-    # TO DO: display the most common day of week
-    df['day_of_week'] = df['Start Time'].dt.dayofweek
-    common_day = df['day_of_week'].mode()[0]
-    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-    print('Most Popular Day:', days[common_day])
-
-
-    # TO DO: display the most common start hour
-    df['hour'] = df['Start Time'].dt.hour
-    common_hour = df['hour'].mode()[0]
-    print('Most Popular Start Hour:', common_hour)
-
-    print("\nThis took %s seconds." % (time.time() - start_time))
-    print('-'*40)
+    print(f"Most Popular Month: {df['month'].mode().iloc[0]}")
+    print(f"Most Popular Day: {df['day_of_week'].mode().iloc[0]}")
+    print(f"Most Popular Hour: {df['hour'].mode().iloc[0]}")
 
 
     
