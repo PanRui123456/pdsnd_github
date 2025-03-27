@@ -15,34 +15,26 @@ def get_filters():
         (str) month - name of the month to filter by, or "all" to apply no month filter
         (str) day - name of the day of week to filter by, or "all" to apply no day filter
     """
-    print('Hello! Let\'s explore some US bikeshare data!')
-    # TO DO: get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
-    city = input('Enter the city you want see data for Chicago , New York City or Washington : ')
-    city = city.casefold()
-    while city not in CITY_DATA:
-      city = input('Invalid city name.Please Try Again!')
-      city = city.casefold()
+    def validate_input(prompt, options):
+        while True:
+            user_input = input(prompt).casefold()
+            if user_input in options:
+                return user_input
+            print(f"Invalid input. Please choose from: {', '.join(options)}")
 
-    # TO DO: get user input for month (all, january, february, ... , june)
-    months = ['all', 'january', 'february', 'march', 'april', 'may', 'june']
-    month = input('Enter the month from January to June OR Enter "all" for no month filter : ')
-    month = month.casefold()
-    while month not in months:
-        month = input('Invalid month name.Please Try Again!')
-        month = month.casefold()
-        
+    city_prompt = '''\nChoose a city:
+    - Chicago
+    - New York City
+    - Washington\n>>> '''
+    month_prompt = '''\nFilter by month (all, january-june):\n>>> '''
+    day_prompt = '''\nFilter by day (all, monday-sunday):\n>>> '''
 
-    # TO DO: get user input for day of week (all, monday, tuesday, ... sunday)
-    days = ['all', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
-    day = input('Enter the day from Monday to Sunday OR Enter "all" for no day filter : ')
-    day = day.casefold()
-    while day not in days:
-        day = input('Invalid day name.Please Try Again!')
-        day = day.casefold()
-
-
-    print('-'*40)
+    city = validate_input(city_prompt, CITY_DATA.keys())
+    month = validate_input(month_prompt, ['all', 'january', 'february', 'march', 'april', 'may', 'june'])
+    day = validate_input(day_prompt, ['all', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'])
+    
     return city, month, day
+    
 
 
 def load_data(city, month, day):
